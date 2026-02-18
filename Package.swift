@@ -1,13 +1,13 @@
-// swift-tools-version:4.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version: 6.2
 
 import PackageDescription
 
 let package = Package(
     name: "LineNoise",
+    platforms: [
+        .macOS(.v26),
+    ],
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "LineNoise",
             targets: ["LineNoise"]),
@@ -16,20 +16,20 @@ let package = Package(
             targets: ["linenoiseDemo"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.0")
+        .package(url: "https://github.com/Quick/Nimble.git", from: "14.0.0")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "LineNoise",
             dependencies: [],
-            path: "Sources/linenoise"),
-        .target(
+            path: "Sources/LineNoise"),
+        .executableTarget(
             name: "linenoiseDemo",
-            dependencies: ["LineNoise"]),
+            dependencies: ["LineNoise"],
+            path: "Sources/LineNoiseDemo"),
         .testTarget(
             name: "linenoiseTests",
-            dependencies: ["LineNoise", "Nimble"]),
+            dependencies: ["LineNoise", "Nimble"],
+            path: "Tests/LineNoiseTests"),
     ]
 )

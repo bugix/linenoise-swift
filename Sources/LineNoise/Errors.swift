@@ -27,29 +27,11 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import XCTest
-import Nimble
-@testable import LineNoise
+import Foundation
 
-class AnsiCodesTests: XCTestCase {
-    
-    func testGenerateEscapeCode() {
-        expect(AnsiCodes.escapeCode("foo")).to(equal("\u{001B}[foo"))
-    }
-    
-    func testEraseRight() {
-        expect(AnsiCodes.eraseRight).to(equal("\u{001B}[0K"))
-    }
-    
-    func testCursorForward() {
-        expect(AnsiCodes.cursorForward(10)).to(equal("\u{001B}[10C"))
-    }
-    
-    func testClearScreen() {
-        expect(AnsiCodes.clearScreen).to(equal("\u{001B}[2J"))
-    }
-    
-    func testHomeCursor() {
-        expect(AnsiCodes.homeCursor).to(equal("\u{001B}[H"))
-    }
+public enum LinenoiseError: Error {
+    case notATTY
+    case generalError(String)
+    case EOF
+    case CTRL_C
 }

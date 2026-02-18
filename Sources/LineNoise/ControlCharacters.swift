@@ -27,29 +27,31 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import XCTest
-import Nimble
-@testable import LineNoise
+import Foundation
 
-class AnsiCodesTests: XCTestCase {
+internal enum ControlCharacters: UInt8 {
+    case Null       = 0
+    case Ctrl_A     = 1
+    case Ctrl_B     = 2
+    case Ctrl_C     = 3
+    case Ctrl_D     = 4
+    case Ctrl_E     = 5
+    case Ctrl_F     = 6
+    case Bell       = 7
+    case Ctrl_H     = 8
+    case Tab        = 9
+    case Ctrl_K     = 11
+    case Ctrl_L     = 12
+    case Enter      = 13
+    case Ctrl_N     = 14
+    case Ctrl_P     = 16
+    case Ctrl_T     = 20
+    case Ctrl_U     = 21
+    case Ctrl_W     = 23
+    case Esc        = 27
+    case Backspace  = 127
     
-    func testGenerateEscapeCode() {
-        expect(AnsiCodes.escapeCode("foo")).to(equal("\u{001B}[foo"))
-    }
-    
-    func testEraseRight() {
-        expect(AnsiCodes.eraseRight).to(equal("\u{001B}[0K"))
-    }
-    
-    func testCursorForward() {
-        expect(AnsiCodes.cursorForward(10)).to(equal("\u{001B}[10C"))
-    }
-    
-    func testClearScreen() {
-        expect(AnsiCodes.clearScreen).to(equal("\u{001B}[2J"))
-    }
-    
-    func testHomeCursor() {
-        expect(AnsiCodes.homeCursor).to(equal("\u{001B}[H"))
+    var character: Character {
+        return Character(UnicodeScalar(Int(self.rawValue))!)
     }
 }

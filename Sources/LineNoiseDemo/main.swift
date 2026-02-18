@@ -27,29 +27,66 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import XCTest
-import Nimble
-@testable import LineNoise
+import LineNoise
+import Foundation
 
-class AnsiCodesTests: XCTestCase {
+let ln = LineNoise()
+
+ln.setCompletionCallback { currentBuffer in
+    let completions = [
+        "Hello, world!",
+        "Hello, Linenoise!",
+        "Swift is Awesome!"
+    ]
     
-    func testGenerateEscapeCode() {
-        expect(AnsiCodes.escapeCode("foo")).to(equal("\u{001B}[foo"))
+    return completions.filter { $0.hasPrefix(currentBuffer) }
+}
+
+ln.setHintsCallback { currentBuffer in
+    let hints = [
+        "Carpe Diem",
+        "Lorem Ipsum",
+        "Swift is Awesome!"
+    ]
+    
+    let filtered = hints.filter { $0.hasPrefix(currentBuffer) }
+    
+    if let hint = filtered.first {
+        // Make sure you return only the missing part of the hint
+        let hintText = String(hint.dropFirst(currentBuffer.count))
+        
+        // (R, G, B)
+        let color = (127, 0, 127)
+        
+        return (hintText, color)
+    } else {
+        return (nil, nil)
     }
-    
-    func testEraseRight() {
-        expect(AnsiCodes.eraseRight).to(equal("\u{001B}[0K"))
-    }
-    
-    func testCursorForward() {
-        expect(AnsiCodes.cursorForward(10)).to(equal("\u{001B}[10C"))
-    }
-    
-    func testClearScreen() {
-        expect(AnsiCodes.clearScreen).to(equal("\u{001B}[2J"))
-    }
-    
-    func testHomeCursor() {
-        expect(AnsiCodes.homeCursor).to(equal("\u{001B}[H"))
+}
+
+do {
+    try ln.clearScreen()
+} catch {
+    print(error)
+}
+
+print("Type 'exit' to quit")
+
+var done = false
+while !done {
+    do {
+        let output = try ln.getLine(prompt: "? ")
+        print("\nOutput: \(output)")
+        ln.addHistory(output)
+        
+        // Typing 'exit' will quit
+        if output == "exit" {
+            break
+        }
+    } catch LinenoiseError.CTRL_C {
+        print("\nCaptured CTRL+C. Quitting.")
+        done = true
+    } catch {
+        print(error)
     }
 }

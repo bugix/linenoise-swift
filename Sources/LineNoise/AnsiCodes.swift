@@ -27,29 +27,44 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import XCTest
-import Nimble
-@testable import LineNoise
+import Foundation
 
-class AnsiCodesTests: XCTestCase {
+public struct AnsiCodes {
     
-    func testGenerateEscapeCode() {
-        expect(AnsiCodes.escapeCode("foo")).to(equal("\u{001B}[foo"))
+    public static var eraseRight: String {
+        return escapeCode("0K")
     }
     
-    func testEraseRight() {
-        expect(AnsiCodes.eraseRight).to(equal("\u{001B}[0K"))
+    public static var homeCursor: String {
+        return escapeCode("H")
     }
     
-    func testCursorForward() {
-        expect(AnsiCodes.cursorForward(10)).to(equal("\u{001B}[10C"))
+    public static var clearScreen: String {
+        return escapeCode("2J")
     }
     
-    func testClearScreen() {
-        expect(AnsiCodes.clearScreen).to(equal("\u{001B}[2J"))
+    public static var cursorLocation: String {
+        return escapeCode("6n")
     }
     
-    func testHomeCursor() {
-        expect(AnsiCodes.homeCursor).to(equal("\u{001B}[H"))
+    public static func escapeCode(_ input: String) -> String {
+        return "\u{001B}[" + input
     }
+    
+    public static func cursorForward(_ columns: Int) -> String {
+        return escapeCode("\(columns)C")
+    }
+    
+    public static func termColor(color: Int, bold: Bool) -> String {
+        return escapeCode("\(color);\(bold ? 1 : 0);49m")
+    }
+    
+    public static func termColor256(color: Int) -> String {
+        return escapeCode("38;5;\(color)m")
+    }
+    
+    public static var origTermColor: String {
+        return escapeCode("0m")
+    }
+    
 }

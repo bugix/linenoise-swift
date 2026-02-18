@@ -1,6 +1,8 @@
 .DS_Store
+/.build
+/Packages
 xcuserdata/
-
-.build/
-LineNoise.xcodeproj/
-Package.resolved
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
